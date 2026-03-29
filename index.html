@@ -1,0 +1,216 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WACHTER_PROTOCOL</title><style>
+body {
+    margin: 0;
+    background: black;
+    color: white;
+    font-family: monospace;
+    overflow: hidden;
+}
+
+/* 🔴 RED CURSOR */
+#fakeCursor {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid red;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* ⏳ LOADING SCREEN */
+#loadingScreen {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: black;
+    color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+}
+
+#loadingText {
+    animation: blink 1s infinite;
+    letter-spacing: 2px;
+}
+
+@keyframes blink {
+    0% {opacity: 1;}
+    50% {opacity: 0.2;}
+    100% {opacity: 1;}
+}
+
+/* MAIN CONTENT */
+#content {
+    display: none;
+    text-align: center;
+    padding-top: 100px;
+}
+
+input {
+    padding: 10px;
+    background: black;
+    border: 1px solid red;
+    color: red;
+}
+
+button {
+    padding: 10px;
+    background: red;
+    border: none;
+    color: black;
+}
+
+/* PAGE 2 */
+#page2 {
+    display: none;
+    margin-top: 50px;
+}
+
+#creepyImg {
+    width: 250px;
+    transition: 1s;
+}
+
+#signText {
+    margin-top: 20px;
+    font-size: 14px;
+}
+</style></head><body><!-- ⏳ LOADING --><div id="loadingScreen">
+    <p id="loadingText">WACHTER_PROTOCOL // STILL LOADING…</p>
+</div><!-- 🔴 CURSOR --><div id="fakeCursor"></div><!-- 🔊 AUDIO --><audio id="ambient" loop src="ambient.mp3"></audio>
+<audio id="whisper" src="whisper.mp3"></audio>
+
+<!-- 🔐 LOGIN --><div id="content">
+    <h1>ENTER PASSWORD</h1>
+    <input type="password" id="password">
+    <button onclick="checkPassword()">ENTER</button>
+    <p id="message"></p><p id="typing"></p>
+
+<button onclick="openPage2()">OPEN FILE</button>
+
+<!-- PAGE 2 -->
+<div id="page2">
+    <img id="creepyImg" src="hand1.png">
+    <p id="whisper"></p>
+    <p id="finalText"></p>
+    <p id="signText"></p>
+</div>
+
+</div><script>
+/* ⏳ LOADING FIX (WILL NOT STUCK) */
+window.addEventListener("load", () => {
+    setTimeout(() => {
+        let screen = document.getElementById("loadingScreen");
+        if (screen) screen.style.display = "none";
+
+        document.getElementById("content").style.display = "block";
+    }, 3000);
+});
+
+/* CURSOR */
+let cursorX = window.innerWidth / 2;
+let cursorY = window.innerHeight / 2;
+
+document.addEventListener("mousemove", e => {
+    cursorX = e.clientX;
+    cursorY = e.clientY;
+});
+
+document.addEventListener("touchmove", e => {
+    cursorX = e.touches[0].clientX;
+    cursorY = e.touches[0].clientY;
+});
+
+function updateCursor() {
+    let c = document.getElementById("fakeCursor");
+    if (c) c.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+    requestAnimationFrame(updateCursor);
+}
+updateCursor();
+
+/* PASSWORD */
+function checkPassword() {
+    let input = document.getElementById("password").value;
+
+    if (input === "_he was Whaching you_") {
+
+        let ambient = document.getElementById("ambient");
+        if (ambient) {
+            ambient.volume = 0.3;
+            ambient.play().catch(()=>{});
+        }
+
+        randomWhispers();
+        typeText("typing","Access granted...");
+        startPresence();
+
+    } else {
+        document.getElementById("message").innerText = "ACCESS DENIED";
+    }
+}
+
+/* TYPE */
+function typeText(id,text){
+    let el=document.getElementById(id);
+    if(!el)return;
+    el.innerHTML="";
+    let i=0;
+    function t(){
+        if(i<text.length){
+            el.innerHTML+=text[i++];
+            setTimeout(t,40);
+        }
+    }
+    t();
+}
+
+/* WHISPERS */
+function randomWhispers(){
+    let w=document.getElementById("whisper");
+    if(!w)return;
+
+    function play(){
+        w.innerText="";
+        let a=document.getElementById("whisper");
+        let sound=document.getElementById("whisper");
+
+        sound.currentTime=0;
+        sound.volume=0.6;
+        sound.play().catch(()=>{});
+
+        setTimeout(play,Math.random()*10000+5000);
+    }
+    play();
+}
+
+/* PRESENCE */
+function startPresence(){
+    setTimeout(()=>typeText("typing","Scanning user..."),2000);
+    setTimeout(()=>typeText("typing","Location detected."),4000);
+    setTimeout(()=>typeText("typing","Do not move."),6000);
+}
+
+/* PAGE 2 */
+function openPage2(){
+    document.getElementById("page2").style.display="block";
+
+    let img=document.getElementById("creepyImg");
+
+    setTimeout(()=>{img.style.filter="grayscale(100%) blur(3px)";},1000);
+
+    setTimeout(()=>typeText("whisper","they noticed you first"),2000);
+    setTimeout(()=>typeText("finalText","you stayed too long"),5000);
+
+    setTimeout(()=>{
+        typeText("signText","no one cares about us anymore because the wachter is always here");
+    },7000);
+}
+</script></body>
+  </html>
